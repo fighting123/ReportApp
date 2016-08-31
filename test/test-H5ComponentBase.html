@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+
+    <title></title>
+
+    <style type="text/css">
+        body{
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            font-size: 12px;
+        }
+
+        .iphone{
+            width: 340px;
+            height: 540px;
+            background-color: #fff;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -270px 0 0 -170px;
+        }
+        .h5_component_base{
+            transition:all 1s;
+        }
+    </style>
+
+    <script type="text/javascript" src="../js/lib/jquery.js"></script>
+    <script type="text/javascript" src="../js/H5ComponentBase.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/H5ComponentBase.css">
+
+    <body>
+        <!-- 用于开发测试 H5ComponentBase 对象（基本的图文组件） -->
+        <div class="iphone">
+
+        </div>
+
+        <script type="text/javascript">
+
+            var config_src = {
+                type : 'base',
+
+                width:514,
+                height:100,
+                text:'我是原始组件',
+                //bg:'./p1_people.png',
+                /*组件默认样式*/
+                css:{
+                    backgroundColor:"#ccc",
+                    top:100,
+                    opacity:0
+                },
+                /*组件进入动画*/
+                animateIn:{
+                    bottom:80,
+                    opacity:1
+                },
+                /*组件出来动画*/
+                animateOut:{
+                    bottom:0,
+                    opacity:0
+                },
+                center:true
+            }
+
+            
+            $('.iphone').append(new H5ComponentBase('src',config_src));
+
+            //编写新组件的配置文件
+            var config_relative = {
+                type:'base',
+                width:500,
+                height:100,
+                text:'我是新组件',
+                css:{
+                    backgroundColor:'pink',
+                    top:100
+                },
+                center:true,
+                relativeTo:'src',
+            }
+            //把新组件返回的Dom元素添加到 .iphone 元素中进行呈现
+            $('.iphone').append(new H5ComponentBase('relative',config_relative));
+
+            //触发组件动画
+            var leave = true;
+            $('body').click(function(){
+                leave = !leave;
+                $('.h5_component_base').trigger(leave?'onLeave':'onLoad')
+            })
+            $('body').click();
+        </script>
+
+    </body>
+
+</html>

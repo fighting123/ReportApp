@@ -1,0 +1,55 @@
+/* 散点图表组件对象 */
+
+var H5ComponentPoint = function(name,cfg){
+	var component = new H5ComponentBase(name,cfg);
+
+	var base = cfg.data[0][1];
+	$.each(cfg.data,function(index,item){
+		var point = $('<div class="point point_'+index+'"></div>');
+
+		var name = $('<div class="name">'+item[0]+'</div>');
+		var rate = $('<div class="per">'+(item[1]*100)+'%</div>');
+
+		point.append(name.append(rate));
+
+		var per = (item[1]/base)*100+'%';
+		point.width(per).height(per);
+		
+		if(item[2]){
+			point.css({backgroundColor:item[2]})
+		}
+		if (item[3] !== undefined && item[4] !== undefined) {
+			point.css({left:item[3],top:item[4]});
+		//暂存left、top到元素上
+			point.data({'left':item[3],'top':item[4]});
+		};
+		// 设置zIndex、重设位置
+        point.css('zIndex',100-index);
+        point.css({top:0,left:0});
+        
+        point.css('transition','all 1s '+index*.5+'s')
+		component.append(point);
+	});
+	   // 任onLoad之后取出暂存的left、top 并且附加到 CSS 中
+	component.on('onLoad',function(){
+	   component.find('.point').each(function(index,item){
+	     $(item).css({'left':$(item).data('left'),'top':$(item).data('top')});
+	   })
+	});
+	// onLeave之后，还原初始的位置
+	component.on('onLeave',function(){
+	   component.find('.point').each(function(index,item){
+	     $(item).css({top:0,left:0});
+	   })
+	})
+
+	component.find('.point').on('click',function(){
+
+	     component.find('.point').removeClass('point_focus');
+	     $(this).addClass('point_focus');
+
+	     return false;
+	}).eq(0).addClass('point_focus')
+
+	return component;
+}
